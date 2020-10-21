@@ -7,8 +7,14 @@ class ColorPalette extends Component {
 
 	constructor(props) {
 		super(props);
+		const { match: { params } } = this.props;
+
 		this.colorPalette = document.getElementById('color-palette');
 		this.currentElem = null;
+		this.state = {
+			colors: params.colors !== undefined ? params.colors.split('-') : null
+		}
+
 
 		window.addEventListener('keydown', (e) => {
 			if(e.keyCode===32){
@@ -26,18 +32,19 @@ class ColorPalette extends Component {
 	}
 
 	componentDidMount(){
-		const { match: { params } } = this.props;
-		
-		//console.log(`${params.colors}`);
-		if(params.colors === "generate"){
-			this.generateColorPalette();
-		}else if(params.colors){
-			this.colorArr = params.colors.split("-");
-			//console.log(this.colorArr);
-			this.generatePalette(this.colorArr);
+		if(this.state.colors !== undefined){
+			if(this.state.colors[0] === "generate"){
+				this.generateColorPalette();
+			}else if(this.state.colors.length > 1){
+				this.colorArr = this.state.colors;
+				this.generatePalette(this.colorArr);
+			}else{
+				this.generateColorPalette();
+			}
 		}else{
 			this.generateColorPalette();
 		}
+		
 /*
 		var i;
 		var list;
@@ -119,6 +126,7 @@ class ColorPalette extends Component {
 	}
 
 	generateColorPalette = () => {
+		
 		let colors = [];
 
 		const scheme = new ColorScheme();
@@ -127,6 +135,7 @@ class ColorPalette extends Component {
 
 		let colorArr = colors.splice(0, 5);
 		this.generatePalette(colorArr);
+		console.log(`ColorArray : ${colorArr}`);
 		this.props.match.params.colors = colorArr.join('-');
 		//console.log(`ColorArray : ${colorArr}`);
 	}
@@ -134,6 +143,10 @@ class ColorPalette extends Component {
 	
 
 	render() {
+
+		//console.log(this.props);
+		//this.renderRedirect();
+
 		return (
 			<div className = "App" id="App">
 				<h3> Color Palette Generator  </h3>
