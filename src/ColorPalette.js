@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ColorScheme from "color-scheme";
-//import { Redirect } from 'react-router-dom';
+
 
 
 class ColorPalette extends Component {
@@ -122,11 +122,12 @@ class ColorPalette extends Component {
 				this.notification('Color <b>' + targetInput.value + '</b> copied to your clipboard');
 			});
 		});
-			
+
+		let colorString = colors.join('-');
+		this.props.history.push(`/palette/${colorString}`)
 	}
 
 	generateColorPalette = () => {
-		
 		let colors = [];
 
 		const scheme = new ColorScheme();
@@ -135,9 +136,7 @@ class ColorPalette extends Component {
 
 		let colorArr = colors.splice(0, 5);
 		this.generatePalette(colorArr);
-		console.log(`ColorArray : ${colorArr}`);
-		this.props.match.params.colors = colorArr.join('-');
-		//console.log(`ColorArray : ${colorArr}`);
+
 	}
 
 	
